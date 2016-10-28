@@ -1,0 +1,14 @@
+<div class="panel panel-default">
+    <div class="panel-heading" ng-click="changeState()">
+        <h4 class="panel-title">
+            <a  href="javascript:">
+                {{title}}
+            </a>
+        </h4>
+    </div>
+    <div ng-class="{collapse : !isOpen}"><!--class="collapse"-->
+        <div class="panel-body">
+            {{content}}
+        </div>
+    </div>
+</div>

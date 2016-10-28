@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="../bootstrap.css">
+</head>
+<body ng-app="newsApp" ng-controller="NewsCtrl">
+    <div class="container">
+        <news-group>
+            <news-item ng-repeat="news in newsArr" title = 'news.title' content = 'news.content'></news-item>
+        </news-group>
+    </div>
+
+<script type="text/javascript" src="../angular.js"></script>
+    <script type="text/javascript">
+       angular.module('newsApp',[])
+               .directive('newsGroup', function () {
+                   return{
+                       template  : "<div class='panel-group' ng-transclude></div>",
+                       replace   : true,
+                       transclude: true,
+                       controller:function () {
+                           var opendScope = null;
+                           this.closeOtherOpenedItem  = function (scope1) {
+                               if (opendScope!=null &&opendScope!=scope1){
+                                   opendScope.isOpen = false;
+                               }
+                               opendScope = scope1;
+                           }
+                       }
+
+                   }
+               })
+               .directive('newsItem', function () {
+                   return{
+                       templateUrl: 'index_template.html',
+                       replace    : true,
+                       scope      : {
+                           title   : ' = ' ,
+                           content : ' = '
+                       },
+                       link: function (scope, elements, attrs, groupController) {
+                           scope.isOpen = false; //默认关闭
+                           scope.changeState = function () {
+                               scope.isOpen  = !scope.isOpen;
+                               if (scope.isOpen ) {//当前的是打开的
+                                   groupController.closeOtherOpenedItem(scope)//关闭其他的
+                               }
+
+                           }
+
+                       },
+                       require: '^newsGroup'
+                   }
+               })
+               .controller('NewsCtrl', function($scope){
+                   $scope.newsArr = [
+                       {
+                           title : 'title11111111',
+                           content : 'content11111111111'
+                       },
+                       {
+                           title : 'title222222',
+                           content : 'content2222222222222'
+                       },
+                       {
+                           title : 'title3333333',
+                           content : 'content33333333333333'
+                       },
+                       {
+                           title : 'title444444',
+                           content : 'content444444444444444444444'
+                       }
+                   ]
+               });
+    </script>
+
+</body>
+</html>
